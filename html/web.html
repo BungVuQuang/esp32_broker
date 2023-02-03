@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>ESP Wi-Fi Manager</title>
+
+</head>
+
+<body>
+  <div class="topnav">
+    <h1>ESP Wi-Fi Manager</h1>
+  </div>
+  <div class="content">
+    <div class="card-grid">
+      <div class="card">
+        <p>
+          <label for="ssid">SSID </label>
+          <input type="text" id="ssid" name="ssid"><br>
+          <label for="pass">Password</label>
+          <input type="text" id="pass" name="pass"><br>
+          <button onclick="sendWifiInfo()"> Send </button>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var xhttp1 = new XMLHttpRequest();
+
+    function sendWifiInfo() {
+      var ssid = document.getElementById("ssid").value;
+      var pass = document.getElementById("pass").value;
+      xhttp1.open("POST", "/wifi", true);
+      xhttp1.send(ssid + '/' + pass);
+    }
+  </script>
+</body>
+
+</html>

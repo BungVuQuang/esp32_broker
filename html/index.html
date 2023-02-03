@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.0.js"></script> -->
+    <style>
+        :root {
+            --color-primary: #7380ec;
+            --color-danger: #ff7782;
+            --color-success: #41f1b6;
+            --color-warning: #ffbb55;
+            --color-white: #fff;
+            --color-info-dark: #7b8da1;
+            --color-info-light: #dce1eb;
+            --color-dark: #363949;
+            --color-light: rgba(132, 139, 200, 0.18);
+            --color-primary-variant: #111e88;
+            --color-dark-variant: #677486;
+            --color-background: #f6f6f9;
+
+            --card-border-radius: 2rem;
+            --border-radius-1: 0.4rem;
+            --border-radius-2: 0.8rem;
+            --border-radius-3: 1.2rem;
+            --card-padding: 1.8rem;
+            --padding-1: 1.2rem;
+
+            --box-shadow: 0 2rem 3rem var(--color-light);
+
+            --white-color: #fff;
+            --black-color: #000;
+            --text-color: #333;
+            --border-color: #dbdbdb;
+            --primary-color: #ee4d2d;
+            --primary-hover: #ed5c3f;
+            --star-gold-color: #ffce3d;
+            --discount-color: rgba(255, 216, 64, 0.94);
+            --navbar-height: 33px;
+            --header-height: 70px;
+            --header-with-search-height: calc(var(--header-height) - var(--navbar-height));
+            --header-sort-bar-height: 46px;
+        }
+
+        /* =================DARK THEME VARAIBLES=========== */
+
+        .dark-theme-variables {
+            --color-background: #181a1e;
+            --color-white: #202528;
+            --color-dark: #edeffd;
+            --color-dark-variant: #a3bdcc;
+            --color-light: rgba(0, 0, 0, 0.4);
+            --box-shadow: 0 2rem 3rem var(--color-light);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: 0;
+            border: 0;
+            text-decoration: none;
+            list-style: none;
+        }
+
+        body {
+            /* font-family: Helvetica Neue,Helvetica,Arial,文泉驛正黑,WenQuanYi Zen Hei,Hiragino Sans GB,儷黑 Pro,LiHei Pro,Heiti TC,微軟正黑體,Microsoft JhengHei UI,Microsoft JhengHei,sans-serif;
+    color: rgba(0,0,0,0.8); */
+            width: 100vw;
+            height: 100vh;
+            color: var(--color-dark);
+            font-family: poppins, sans-serif;
+            font-size: 0.88rem;
+            background: var(--color-background);
+            user-select: none;
+            /*Prevent text selection*/
+            overflow-x: hidden;
+            /*chieu rong Noi dung du thua se bi an di*/
+
+        }
+
+        html {
+            font-size: 14px;
+            /* font-size: 62.5%;
+    line-height: 1.6rem;
+    /* font-family:'Roboto',sans-serif; 
+    box-sizing: border-box; */
+
+        }
+
+        .container {
+            display: grid;
+            width: 96%;
+            margin: 0 auto;
+            gap: 1.8rem;
+            grid-template-columns: 14rem auto 23rem;
+        }
+
+
+        /* ===================TOAST NOTIFICATION ==============*/
+        .toast {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            border-radius: 6px;
+            background: #fff;
+            padding: 20px 35px 20px 25px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            border-left: 8px solid #40f467;
+            overflow: hidden;
+            transform: translateX(calc(100% + 60px));
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.25, 1.35);
+        }
+
+        .toast.active {
+            transform: translateX(0);
+        }
+
+        .toast-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .toast-check {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 35px;
+            width: 35px;
+            background-color: #40f467;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            margin: 0 20px;
+        }
+
+        .message-text {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .text-1 {
+            color: #333;
+        }
+
+        .text-2 {
+            color: #666;
+            font-weight: 400;
+            font-size: 16px;
+        }
+
+        .toast-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            padding: 5px;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
+        }
+
+        .progress-toast {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            background: #ddd;
+        }
+
+        .progress-toast::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #40f467;
+        }
+
+        .progress-toast.active::before {
+            animation: progress 2s linear forwards;
+        }
+
+        @keyframes progress {
+            100% {
+                right: 100%;
+            }
+        }
+
+
+        /*======================TOP SIDEBAR==================*/
+        aside {
+            height: 100vh;
+        }
+
+        aside .top {
+            background: var(--color-white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1.4rem;
+        }
+
+        aside .logo {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        aside .logo img {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        aside .close {
+            display: none;
+        }
+
+        /*===========================SIDEBAR==================*/
+        aside .side-bar {
+            background-color: var(--color-white);
+            display: flex;
+            flex-direction: column;
+            height: 86vh;
+            position: relative;
+            top: 3rem;
+            /*chỉ định vị trí dọc của phần tử chỉ định*/
+        }
+
+        aside h3 {
+            font-weight: 500;
+        }
+
+        aside .side-bar div {
+            display: flex;
+            color: var(--color-info-dark);
+            margin-left: 2rem;
+            gap: 1rem;
+            align-items: center;
+            position: relative;
+            height: 3.7rem;
+            transition: all 300ms ease;
+            cursor: pointer;
+        }
+
+        aside .side-bar div span {
+            font-size: 1.6rem;
+            transition: all 300ms ease;
+        }
+
+        aside .side-bar div:last-child {
+            position: absolute;
+            bottom: 2rem;
+            width: 100%;
+        }
+
+        aside .side-bar div.active {
+            background: var(--color-light);
+            color: var(--color-primary);
+            margin-left: 0;
+        }
+
+        /* before thì thêm vào trước và after là thêm vào sau 
+để before hay after hoạt động thì bắt buộc phải có thuộc tính content. */
+        aside .side-bar div.active::before {
+            content: '';
+            width: 6px;
+            height: 100%;
+            background: var(--color-primary);
+        }
+
+        aside .side-bar div.active span {
+            color: var(--color-primary);
+            margin-left: calc(1rem -3px);
+        }
+
+        aside .side-bar div:hover {
+            color: var(--color-primary);
+
+        }
+
+        aside .side-bar div:hover span {
+            margin-left: 1rem;
+        }
+
+        aside .side-bar div span.message-count {
+            background: var(--color-danger);
+            color: var(--color-white);
+            padding: 2px 10px;
+            font-size: 11px;
+            border-radius: var(--border-radius-1);
+            align-items: center;
+        }
+
+        /* ==========================MAIN =================*/
+
+        main {
+            margin-top: 1.4rem;
+            display: block;
+        }
+
+        main .date {
+            display: inline-block;
+            background-color: var(--color-light);
+            border-radius: var(--border-radius-1);
+            margin-top: 1rem;
+            padding: 0.5rem 1.6rem;
+        }
+
+        main .date input[type="date"] {
+            background: transparent;
+            color: var(--color-dark);
+        }
+
+        main .tab-pane {
+            color: #333;
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        main .insights {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /*hàm lặp lại 3 lần cho ra 3 cot với độ rộng là 1fr(1/(số cột))*/
+            gap: 1.6rem;
+        }
+
+        /* chọn các thẻ div là con trực tiếp của class insights */
+        main .insights>div {
+            background: var(--color-white);
+            padding: var(--card-padding);
+            border-radius: var(--card-border-radius);
+            margin-top: 1rem;
+            box-shadow: var(--box-shadow);
+            transition: all 300ms ease;
+        }
+
+        main .insights>div:hover {
+            box-shadow: none;
+        }
+
+        main .insights>div span {
+            padding: 0.5rem;
+            border-radius: 50%;
+            color: var(--color-white);
+            font-size: 2rem;
+        }
+
+
+        main .insights>div.income span {
+            background: var(--color-success);
+        }
+
+        main .insights>div .middle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        main .insights h3 {
+            margin: 1rem 0 0.6rem;
+            font-size: 1rem;
+            color: var(--color-dark);
+        }
+
+        main .insights h1 {
+            margin: 1rem 0 0.6rem;
+            font-size: 1.8rem;
+            color: var(--color-dark);
+        }
+
+        main .insights .progress {
+            position: relative;
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+        }
+
+        main .insights svg {
+            width: 7rem;
+            height: 7rem;
+        }
+
+        main .insights svg circle {
+            fill: none;
+            stroke: var(--color-primary);
+            stroke-width: 14;
+            stroke-linecap: round;
+            transform: translate(5px, 5px);
+            stroke-dasharray: 110;
+            stroke-dashoffset: 92;
+        }
+
+        main .insights .sales svg circle {
+            stroke-dasharray: 200;
+            stroke-dashoffset: -30;
+        }
+
+        main .insights .expenses svg circle {
+            stroke-dasharray: 80;
+            stroke-dashoffset: 20;
+        }
+
+        main .insights .income svg circle {
+            stroke-dasharray: 110;
+            stroke-dashoffset: 35;
+        }
+
+        main .insights .progress .number {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        main .insights small {
+            margin-top: 1.3rem;
+            display: block;
+        }
+
+        /* ===================RECENT ORDERS =====================*/
+
+        main .recent-order {
+            margin-top: 2rem;
+        }
+
+        main .recent-order h2 {
+            margin-bottom: 0.8rem;
+        }
+
+        main .recent-order table {
+            background: var(--color-white);
+            width: 100%;
+            border-radius: var(--card-border-radius);
+            padding: var(--card-padding);
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            transition: all 300ms ease;
+        }
+
+        main .recent-order table:hover {
+            box-shadow: none;
+        }
+
+        main table tbody td {
+            height: 2.8rem;
+            border-bottom: 1px solid var(--color-light);
+            color: var(--color-dark-variant);
+        }
+
+        main table tbody tr:last-child td {
+            border: none;
+        }
+
+        main .recent-order a {
+            text-align: center;
+            display: block;
+            margin: 1rem auto;
+            color: var(--color-primary);
+        }
+
+        /* ========================== TEMPERATUE CONTENT ====================== */
+
+        .tab-pane .content {
+            margin: 5% auto 0;
+        }
+
+        .tab-pane .content .card {
+            position: relative;
+            width: 200px;
+            margin: 0 auto 40px;
+            height: 150px;
+            border-radius: var(--card-border-radius);
+            align-items: center;
+            background: var(--color-white);
+        }
+
+        .tab-pane .content .card.temperature {
+            color: var(--color-dark);
+        }
+
+        .tab-pane .content .card .packet {
+            margin: auto 0;
+        }
+
+        .tab-pane .content #high-chart {
+            position: absolute;
+            bottom: 2px;
+        }
+
+
+        /* ====================  MQTT CONFIG TAB =================== */
+
+
+        .hide {
+            display: none;
+        }
+
+        /* =========================== RIGHT ========================*/
+
+        .right {
+            margin-top: 1.4rem;
+        }
+
+        .right .top {
+            display: flex;
+            justify-content: end;
+            gap: 2rem;
+        }
+
+        .right .top button {
+            display: none;
+        }
+
+        .right .theme-toggler {
+            background: var(--color-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 1.6rem;
+            width: 4.2rem;
+            cursor: pointer;
+            border-radius: var(--border-radius-2);
+        }
+
+        .right .theme-toggler span {
+            font-size: 1.2rem;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .right .theme-toggler span.active {
+            background: var(--color-primary);
+            color: white;
+            border-radius: var(--border-radius-1);
+        }
+
+        .right .top .profile {
+            display: flex;
+            gap: 1rem;
+            text-align: right;
+        }
+
+        /* ======================================RECENT UPDATES ============*/
+
+        .right .recent-updates {
+            margin-top: 1rem;
+        }
+
+        .right .recent-updates h2 {
+            margin-bottom: 0.8rem;
+        }
+
+        .right .recent-updates .updates {
+            background: var(--color-white);
+            padding: var(--card-padding);
+            border-radius: var(--card-border-radius);
+            box-shadow: var(--box-shadow);
+            transition: all 300ms ease;
+        }
+
+        .right .recent-updates .updates:hover {
+            box-shadow: none;
+        }
+
+        .right .recent-updates .updates .update {
+            display: grid;
+            grid-template-columns: 2.6rem auto;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ============================ SALE ANALYTICS =================== */
+
+        .right .sale-analytics {
+            margin-top: 2rem;
+        }
+
+        .right .sale-analytics h2 {
+            margin-bottom: 0.8rem;
+        }
+
+        .right .sale-analytics .item {
+            background: var(--color-white);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.7rem;
+            padding: 1.4rem var(--card-padding);
+            border-radius: var(--border-radius-3);
+            box-shadow: var(--box-shadow);
+            transition: all 300ms ease;
+        }
+
+        .right .sale-analytics .item:hover {
+            box-shadow: none;
+        }
+
+        .right .sale-analytics .item .right {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin: 0;
+            width: 100%;
+        }
+
+        .right .sale-analytics .item .icon {
+            padding: 0.6rem;
+            color: var(--color-white);
+            border-radius: 50%;
+            background: var(--color-primary);
+            display: flexbox;
+        }
+
+        .right .sale-analytics .item.offline .icon {
+            background: var(--color-danger);
+        }
+
+        .right .sale-analytics .item.customers .icon {
+            background: var(--color-success);
+        }
+
+        .right .sale-analytics .add-product {
+            background-color: transparent;
+            border: 2px dashed var(--color-primary);
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .right .sale-analytics .add-product div {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .right .sale-analytics .add-product div h3 {
+            font-weight: 600;
+        }
+
+        .btn_send_info_wifi {
+            margin: 10px 0;
+            height: 38px;
+            line-height: 38px;
+            border: 1px solid transparent;
+            padding: 0 18px;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-radius: var(--border-radius-2);
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn_send_mode_online {
+            margin: 10px 0;
+            margin-left: 50px;
+            height: 38px;
+            line-height: 38px;
+            border: 1px solid transparent;
+            padding: 0 18px;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-radius: var(--border-radius-2);
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn_turn_off {
+            margin-top: 10px;
+            margin: auto;
+            height: 38px;
+            line-height: 38px;
+            border: 1px solid transparent;
+            padding: 0 18px;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-radius: var(--border-radius-2);
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn_turn_on {
+            margin-top: 10px;
+            margin: auto;
+            height: 38px;
+            line-height: 38px;
+            border: 1px solid transparent;
+            padding: 0 18px;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-radius: var(--border-radius-2);
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .img_device {
+            margin: 0 auto;
+            max-width: 200px;
+            height: 80px;
+        }
+
+        .control_area {
+            text-align: center;
+        }
+
+
+        .layui-form-item {
+            margin-top: 1rem;
+            width: 300px;
+        }
+
+        .info-label {
+
+            font-size: 15px;
+            width: 100px;
+        }
+
+        #ssid {
+            width: 300px;
+            font-size: 14px;
+            height: 30px;
+        }
+
+        #pass {
+            width: 300px;
+            font-size: 14px;
+            height: 30px;
+        }
+
+        /* ==========================MEDIA QUERIES================== */
+
+        @media screen and (max-width: 1200px) {
+            .container {
+                width: 94%;
+                grid-template-columns: 7rem auto 23rem;
+            }
+
+            aside .logo h2 {
+                display: none;
+            }
+
+            aside .side-bar h3 {
+                display: none;
+            }
+
+            aside .side-bar a {
+                width: 5.6rem;
+            }
+
+            aside .side-bar a:last-child {
+                position: relative;
+                margin-top: 1.8rem;
+            }
+
+            main .insights {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            main .recent-order {
+                width: 94%;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                margin: 2rem 0 0 8.8rem;
+            }
+
+            main .recent-order table {
+                width: 83vw;
+            }
+
+            main table tbody tr td:last-child,
+            main table tbody tr td:first-child {
+                display: none;
+            }
+        }
+
+        /* ========================== wifi-set-up================== */
+        .wifi-set-up {
+            display: block;
+            margin-top: 1rem;
+
+        }
+
+        /* ==========================MEDIA QUERIES================== */
+
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 100%;
+                grid-template-columns: 1fr;
+            }
+
+            aside {
+                position: fixed;
+                left: -100%;
+                background: var(--color-white);
+                width: 18rem;
+                z-index: 3;
+                box-shadow: 1rem 3rem 4rem var(--color-light);
+                height: 100vh;
+                padding-right: var(--card-padding);
+                display: none;
+                animation: showMenu 400ms ease forwards;
+            }
+
+            @keyframes showMenu {
+                to {
+                    left: 0;
+                }
+            }
+
+            aside .logo {
+                margin-left: 1rem;
+            }
+
+            aside .logo h2 {
+                display: inline;
+            }
+
+            aside .side-bar h3 {
+                display: inline;
+            }
+
+            aside .side-bar a {
+                width: 100%;
+                height: 3.4rem;
+            }
+
+            aside .side-bar a:last-child {
+                position: absolute;
+                bottom: 5rem;
+            }
+
+            aside .close {
+                display: inline-block;
+                cursor: pointer;
+            }
+
+            main {
+                padding: 0 1rem;
+            }
+
+            main .recent-order {
+                position: relative;
+                margin: 3rem 0 0 0;
+                width: 100%;
+            }
+
+            main .recent-order table {
+                width: 100%;
+                margin: 0;
+            }
+
+            .right {
+                width: 94%;
+                margin: 0 auto 4rem;
+            }
+
+            .right .top {
+                position: fixed;
+                top: 0;
+                left: 0;
+                align-items: center;
+                padding: 0 0.8rem;
+                height: 4.6rem;
+                background: var(--color-white);
+                width: 100%;
+                margin: 0;
+                z-index: 2;
+                box-shadow: 0 1rem 1rem var(--color-light);
+            }
+
+            .right .top .theme-toggler {
+                width: 4.4rem;
+                position: absolute;
+                left: 66%;
+            }
+
+            .right .profile .info {
+                display: none;
+            }
+
+            .right .top button {
+                display: inline-block;
+                background: transparent;
+                cursor: pointer;
+                color: var(--color-dark);
+                position: absolute;
+                left: 1rem;
+                font-size: 2rem;
+            }
+
+            .right .top button span {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <!-- FONT ICON -->
+    <!-- <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"> -->
+</head>
+
+<body>
+    <div class="container">
+        <div class="toast">
+            <div class="toast-content">
+                <i class="uil uil-check toast-check"></i>
+                <div class="message">
+                    <span class="message-text text-1">Success</span>
+                    <span class="message-text text-2">Your changes has been saved</span>
+                </div>
+            </div>
+            <i class="uil uil-multiply toast-close"></i>
+            <div class="progress-toast"></div>
+        </div>
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <img src="./logo.png">
+                    <h2>Local <span class="danger">Control</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">close</span>
+                </div>
+            </div>
+            <div class="side-bar">
+                <div class="tab-item">
+
+                    <h3>DashBoard</h3>
+                </div>
+                <div class="tab-item ">
+
+                    <h3>Connection</h3>
+                </div>
+                <div class="tab-item ">
+
+                    <h3>Subscribe</h3>
+                </div>
+                <div class="tab-item active">
+
+                    <h3>Monitoring</h3>
+                </div>
+                <div class="tab-item ">
+
+                    <h3>Log Out</h3>
+                </div>
+            </div>
+        </aside>
+        <!------------------ END OF ASIDE --------->
+        <main>
+            <h1>Local Control</h1>
+            <div class="date">
+                <input type="date">
+            </div>
+            <button class="btn_send_mode_online" onclick="sendCommandOnline()">Online Mode</button>
+            <div class="app-content">
+                <div class="tab-pane active">
+                    <div class="insights">
+                        <div class="sales">
+                            <div class="card" style="text-align: center;">
+                                <div class="card temperature" style="display: flex; flex-direction: column;">
+                                    <h4
+                                        style="margin: 12px 12px; justify-content: center; align-items: center; font-size: 20px;">
+
+                                        TEMPERATURE
+                                    </h4>
+                                    <p><span class="reading" style="font-size: 20px; color: #000;"><span id="t1"></span>
+                                            &deg;C</span>
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!------------ END OF SALES -------->
+                        <div class="expenses">
+                            <div class="card" style="text-align: center;">
+                                <div class="card temperature" style="display: flex; flex-direction: column;">
+                                    <h4
+                                        style="margin: 12px 12px; justify-content: center; align-items: center; font-size: 20px;">
+
+
+                                        illuminance
+                                    </h4>
+                                    <p><span class="reading" style="font-size: 20px; color: #000;"><span id="h1"></span>
+                                        </span>
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!------------ END OF EXPENSES -------->
+                        <div class="income">
+                            <div class="card" style="text-align: center;">
+                                <div class="card temperature" style="display: flex; flex-direction: column;">
+                                    <div class="middle">
+                                        <img src="./light_off.png" class="img_device" name="image_dev">
+                                    </div>
+                                    <div class="control_area">
+                                        <h4
+                                            style="margin: 12px 12px; justify-content: center; align-items: center; font-size: 20px;">
+
+
+                                            Đèn bếp
+                                        </h4>
+                                        <button class="btn_turn_on" onclick="turnOff()" id="btn_on">Turn On</button>
+                                        <button class="btn_turn_off hide" onclick="turnOn()" id="btn_off"
+                                            type="button">Turn
+                                            OFF</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wifi-set-up">
+                        <h1>Wifi Setup</h1>
+                        <div class="card">
+                            <div class="card-wifi">
+                                <div class="layui-form-item">
+                                    <label for="ssid" class="info-label">SSID:</label>
+                                    <div class="layui-input-block" style="width: 300px;">
+                                        <input type="text" name="ssid" placeholder="Nhap SSID" autocomplete="off"
+                                            id="ssid">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="pass" class="info-label">Password:</label>
+                                    <div class="layui-input-block" style="width: 300px;">
+                                        <input type="text" name="pass" id="pass" placeholder="Nhap Password "
+                                            autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <button class="btn_send_info_wifi" onclick="sendWifiInfo()">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-------------------- END OF INSIGHTS ---------->
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+
+    <script type="text/javascript">
+        var tempStateLed = "OFF";
+        var modewifi = "CHANGE";
+        var xhttp1 = new XMLHttpRequest();
+        var xhttp2 = new XMLHttpRequest();
+        var xhttp3 = new XMLHttpRequest();
+        function sendCommandOnline() {
+            var ssid = document.getElementById("ssid").value;
+            var pass = document.getElementById("pass").value;
+            xhttp1.open("POST", "/change", true);
+            xhttp1.send(modewifi);
+        }
+
+        function turnOn() {
+            tempStateLed = "OFF";
+            document.querySelector(".btn_turn_on").classList.remove("hide");
+            document.querySelector(".btn_turn_off").classList.add("hide");
+            document.images['image_dev'].src = './light_off.png';
+            xhttp2.open("POST", "/change", true);
+            xhttp2.send(tempStateLed);
+        }
+
+        function turnOff() {
+            tempStateLed = "ON";
+            document.querySelector(".btn_turn_on").classList.add("hide");
+            document.querySelector(".btn_turn_off").classList.remove("hide");
+            document.images['image_dev'].src = './light_on.png';
+            xhttp2.open("POST", "/change", true);
+            xhttp2.send(tempStateLed);
+        }
+        function sendWifiInfo() {
+            var ssid = document.getElementById("ssid").value;
+            var pass = document.getElementById("pass").value;
+            xhttp3.open("POST", "/change", true);
+            xhttp3.send(ssid + '/' + pass);
+        }
+    </script>
+</body>
+
+</html>

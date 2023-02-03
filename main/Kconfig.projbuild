@@ -1,0 +1,115 @@
+menu "Application Configuration"
+
+	choice WIFI_MODE
+		prompt "Wi-Fi Access mode"
+		default ST_MODE
+		help
+			Select Wi-Fi Access mode.
+		config ST_MODE
+			bool "Station MODE"
+			help
+				Wi-Fi is Station Mode.
+		config AP_MODE
+			bool "Access Point MODE"
+			help
+				Wi-Fi is Access Point Mode.
+	endchoice
+
+	config STATIC_IP
+		depends on ST_MODE
+		bool "Enable Static IP Address"
+		default false
+		help
+			Enable Static IP Address.
+
+	config STATIC_IP_ADDRESS
+		depends on STATIC_IP
+		string "Static IP Address"
+		default "192.168.10.100"
+		help
+			Static IP Address for Station.
+
+	config STATIC_GW_ADDRESS
+		depends on STATIC_IP
+		string "Static GW Address"
+		default "192.168.10.1"
+		help
+			Static GW Address for Station.
+
+	config STATIC_NM_ADDRESS
+		depends on STATIC_IP
+		string "Static Netmask"
+		default "255.255.255.0"
+		help
+			Static Netmask for Station.
+
+	config SUBSCRIBE
+		bool "Start MQTT SUBSCRIBER"
+		default false
+		help
+			Start MQTT SUBSCRIBER.
+
+	config PUBLISH
+		bool "Start MQTT PUBLISHER"
+		default false
+		help
+			Start MQTT PUBLISHER.
+
+endmenu
+
+menu "Example Configuration"
+
+    menu "I2C Master"
+        config I2C_MASTER_SCL
+            int "SCL GPIO Num"
+            default 22
+            help
+                GPIO number for I2C Master clock line.
+
+        config I2C_MASTER_SDA
+            int "SDA GPIO Num"
+            default 21
+            help
+                GPIO number for I2C Master data line.
+
+        config I2C_MASTER_PORT_NUM
+            int "Port Number"
+            default 0
+            help
+                Port number for I2C Master device.
+
+        config I2C_MASTER_FREQUENCY
+            int "Master Frequency"
+            default 400000
+            help
+                I2C Speed of Master device.
+    endmenu
+
+    menu "I2C Slave"
+        config I2C_SLAVE_SCL
+            int "SCL GPIO Num"
+            default 5
+            help
+                GPIO number for I2C Slave clock line.
+
+        config I2C_SLAVE_SDA
+            int "SDA GPIO Num"
+            default 4
+            help
+                GPIO number for I2C Slave data line.
+
+        config I2C_SLAVE_PORT_NUM
+            int "Port Number"
+            default 0
+            help
+                Port number for I2C Slave device.
+
+        config I2C_SLAVE_ADDRESS
+            hex "ESP Slave Address"
+            default 0x78
+            help
+                Hardware Address of I2C Slave Port.
+    endmenu
+
+endmenu
+
