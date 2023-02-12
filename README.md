@@ -60,7 +60,7 @@ idf.py flash monitor
 # Giao diện Web
 #### Cài đặt wifi ban đầu
 
-Khi chưa khởi tạo lần đầu cho ESP-32 thì nó sẽ chạy ở chế độ Access Point và Thiết bị đầu tiên kết nối sẽ có địa chỉ IP:192.168.4.1.Sau đó gửi request đến AP bằng cách truy cập [192.168.4.1/hello](192.168.4.1/hello)
+Khi chưa khởi tạo lần đầu cho ESP-32 thì nó sẽ chạy ở chế độ Access Point và Thiết bị đầu tiên kết nối sẽ có địa chỉ IP:192.168.4.2.Sau đó gửi request đến AP bằng cách truy cập [192.168.4.1/hello](192.168.4.1/hello)
 ![wifi_config](./image/wifi_config.jpg)
 
 SSID:SSID of Router   
@@ -70,7 +70,7 @@ Password:Mật khẩu of Router
 
 
 #### Điều khiển Local
-Nếu ESP-32 mất mạng nó sẽ tự động chạy chế độ điều khiển Local.Thiết bị đầu tiên kết nối sẽ có IP: 192.168.4.1.Người dùng gửi request đến AP bằng cách truy cập [192.168.4.1/local](192.168.4.1/local).Sự truyền nhận dữ liệu giữa gateway và device dựa trên giao thức TCP/IP với Gateway có IP:192.168.1.1(___ESP-32 Gateway___)
+Nếu ESP-32 mất mạng nó sẽ tự động chạy chế độ điều khiển Local.Thiết bị đầu tiên kết nối sẽ có IP: 192.168.4.2.Người dùng gửi request đến AP bằng cách truy cập [192.168.4.1/local](192.168.4.1/local).Sự truyền nhận dữ liệu giữa gateway và device dựa trên giao thức TCP/IP với Gateway có IP:192.168.4.1(___ESP-32 Gateway___)
 ![local_control](./image/local_control.jpg)
 
 ##### Các tính năng của web Local
