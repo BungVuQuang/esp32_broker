@@ -266,6 +266,8 @@ void wifi_init_local_ap(void)
 
     start_webserver();
     local_post_set_callback(local_data_callback);
+    http_get_set_callback(http_get_callback);
+    http_led2_post_set_callback(local_data_callback_2);
     // http_post_set_callback(wifi_data_callback);
     xEventGroupWaitBits(xCreatedEventGroup, WIFI_RECV_INFO, true, false, portMAX_DELAY);
     stop_webserver();

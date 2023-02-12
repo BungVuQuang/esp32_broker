@@ -39,6 +39,8 @@ extern enum provision_type_t provision_type;
 extern EventGroupHandle_t xCreatedEventGroup;
 extern void wifi_data_callback(char *data, int len);
 extern void local_data_callback(char *data, int len);
+extern void local_data_callback_2(char *data, int len);
+extern void http_get_callback(char *data, int len);
 extern void wifi_init_sta(void);
 void initialise_wifi(void);
 void smartconfig_example_task(void *parm);

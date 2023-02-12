@@ -75,15 +75,26 @@ static esp_err_t wifi_post_handler(httpd_req_t *req)
     httpd_resp_send_chunk(req, NULL, 0);
     return ESP_OK;
 }
-
-static const httpd_uri_t wifi_info_uri = {
-    .uri = "/wifi",
+static const httpd_uri_t local_info_uri = {
+    .uri = "/change",
     .method = HTTP_POST,
     .handler = wifi_post_handler,
     /* Let's pass response string in user
      * context to demonstrate it's usage */
-    .user_ctx = "wifi_info_uri",
+    .user_ctx = "change",
 };
+
+static esp_err_t wifi_post_handler_2(httpd_req_t *req)
+{
+    char buf_sd1[100];
+    // printf("da vao day \n");
+    int len = httpd_req_recv(req, buf_sd1, 100);
+    // printf("%s\n",buf_sd1);
+    http_post_handle(buf_sd1, len);
+
+    httpd_resp_send_chunk(req, NULL, 0);
+    return ESP_OK;
+}
 
 static esp_err_t local_post_handler(httpd_req_t *req)
 {
@@ -97,14 +108,52 @@ static esp_err_t local_post_handler(httpd_req_t *req)
     return ESP_OK;
 }
 
-static const httpd_uri_t local_info_uri = {
-    .uri = "/change",
+static const httpd_uri_t local_info_uri_2 = {
+    .uri = "/led2",
+    .method = HTTP_POST,
+    .handler = local_post_handler,
+    /* Let's pass response string in user
+     * context to demonstrate it's usage */
+    .user_ctx = "led2",
+};
+
+static const httpd_uri_t wifi_info_uri = {
+    .uri = "/wifi",
     .method = HTTP_POST,
     .handler = wifi_post_handler,
     /* Let's pass response string in user
      * context to demonstrate it's usage */
-    .user_ctx = "change",
+    .user_ctx = "wifi_info_uri",
 };
+
+static httpd_req_t *get_req;
+void http_send_response(char *data, int len)
+{
+    httpd_resp_send(get_req, (const char *)data, len); // gửi lên web
+    // phải đưa ra hàm main
+}
+
+static esp_err_t ds18b20_getData_handler(httpd_req_t *req)
+{
+    get_req = req;
+    http_get_handle("ds18b20", 7);
+
+    /* After sending the HTTP response the old HTTP request
+     * headers are lost. Check if HTTP request headers can be read now. */
+    if (httpd_req_get_hdr_value_len(req, "Host") == 0)
+    {
+        // ESP_LOGI(TAG, "Request headers lost");
+    }
+    return ESP_OK;
+}
+
+static const httpd_uri_t ds18b20 = {
+    .uri = "/ds18b20",
+    .method = HTTP_GET,
+    .handler = ds18b20_getData_handler,
+    /* Let's pass response string in user
+     * context to demonstrate it's usage */
+    .user_ctx = "ds18b20"};
 
 void start_webserver(void)
 {
@@ -120,7 +169,9 @@ void start_webserver(void)
         ESP_LOGI(TAG, "Registering URI handlers");
         httpd_register_uri_handler(server, &hello);
         httpd_register_uri_handler(server, &local);
+        httpd_register_uri_handler(server, &ds18b20);
         httpd_register_uri_handler(server, &local_info_uri);
+        httpd_register_uri_handler(server, &local_info_uri_2);
         httpd_register_uri_handler(server, &wifi_info_uri);
     }
     else
@@ -148,6 +199,14 @@ void http_post_set_callback(void *cb)
     if (cb)
     {
         http_post_handle = cb;
+    }
+}
+
+void http_led2_post_set_callback(void *cb)
+{
+    if (cb)
+    {
+        local_post_handle = cb;
     }
 }
 

@@ -356,7 +356,6 @@
         main .insights>div span {
             padding: 0.5rem;
             border-radius: 50%;
-            color: var(--color-white);
             font-size: 2rem;
         }
 
@@ -991,9 +990,20 @@
                                     <h4
                                         style="margin: 12px 12px; justify-content: center; align-items: center; font-size: 20px;">
 
-                                        TEMPERATURE
+                                        TEMPERATURE 1
                                     </h4>
                                     <p><span class="reading" style="font-size: 20px; color: #000;"><span id="t1"></span>
+                                            &deg;C</span>
+                                    </p>
+
+                                </div>
+                                <div class="card temperature" style="display: flex; flex-direction: column;">
+                                    <h4
+                                        style="margin: 12px 12px; justify-content: center; align-items: center; font-size: 20px;">
+
+                                        TEMPERATURE 2
+                                    </h4>
+                                    <p><span class="reading" style="font-size: 20px; color: #000;"><span id="t2"></span>
                                             &deg;C</span>
                                     </p>
 
@@ -1008,10 +1018,22 @@
                                         style="margin: 12px 12px; justify-content: center; align-items: center; font-size: 20px;">
 
 
-                                        illuminance
+                                        illuminance 1
                                     </h4>
                                     <p><span class="reading" style="font-size: 20px; color: #000;"><span id="h1"></span>
-                                        </span>
+                                            lm</span>
+                                    </p>
+
+                                </div>
+                                <div class="card temperature" style="display: flex; flex-direction: column;">
+                                    <h4
+                                        style="margin: 12px 12px; justify-content: center; align-items: center; font-size: 20px;">
+
+
+                                        illuminance 2
+                                    </h4>
+                                    <p><span class="reading" style="font-size: 20px; color: #000;"><span id="h2"></span>
+                                            lm</span>
                                     </p>
 
                                 </div>
@@ -1029,10 +1051,22 @@
                                             style="margin: 12px 12px; justify-content: center; align-items: center; font-size: 20px;">
 
 
-                                            Đèn bếp
+                                            Đèn bếp 1
                                         </h4>
                                         <button class="btn_turn_on" onclick="turnOff()" id="btn_on">Turn On</button>
                                         <button class="btn_turn_off hide" onclick="turnOn()" id="btn_off"
+                                            type="button">Turn
+                                            OFF</button>
+                                    </div>
+                                    <div class="control_area">
+                                        <h4
+                                            style="margin: 12px 12px; justify-content: center; align-items: center; font-size: 20px;">
+
+
+                                            Đèn bếp 2
+                                        </h4>
+                                        <button class="btn_turn_on" onclick="turnOff2()" id="btn_on_2">Turn On</button>
+                                        <button class="btn_turn_off hide" onclick="turnOn2()" id="btn_off_2"
                                             type="button">Turn
                                             OFF</button>
                                     </div>
@@ -1076,6 +1110,26 @@
         var xhttp1 = new XMLHttpRequest();
         var xhttp2 = new XMLHttpRequest();
         var xhttp3 = new XMLHttpRequest();
+        var xhttp4 = new XMLHttpRequest();
+        xhttp4.onreadystatechange = function () {
+            //JSON.create là đóng gói, còn JSON.parse là giải mã cái đóng gói thành key và value 
+            console.log(xhttp4.responseText);
+            //const obj = JSON.parse(xhttp4.responseText);//parse cái key:value mà esp response lại
+            if (xhttp4.responseText.slice(0, 1) == 1) {
+                var element1 = document.getElementById('t1');
+                element1.innerText = xhttp4.responseText.slice(2, 7);
+                var element2 = document.getElementById('h1');
+                element2.innerText = xhttp4.responseText.slice(8, 12);
+            } else if (xhttp4.responseText.slice(0, 1) == 2) {
+                var element3 = document.getElementById('t2');
+                element3.innerText = xhttp4.responseText.slice(2, 7);
+                var element4 = document.getElementById('h2');
+                element4.innerText = xhttp4.responseText.slice(8, 12);
+            }
+
+
+        }
+
         function sendCommandOnline() {
             var ssid = document.getElementById("ssid").value;
             var pass = document.getElementById("pass").value;
@@ -1092,6 +1146,15 @@
             xhttp2.send(tempStateLed);
         }
 
+        function turnOn2() {
+            tempStateLed = "OFF";
+            document.querySelector(".btn_turn_on").classList.remove("hide");
+            document.querySelector(".btn_turn_off").classList.add("hide");
+            document.images['image_dev'].src = './light_off.png';
+            xhttp2.open("POST", "/led2", true);
+            xhttp2.send(tempStateLed);
+        }
+
         function turnOff() {
             tempStateLed = "ON";
             document.querySelector(".btn_turn_on").classList.add("hide");
@@ -1100,12 +1163,25 @@
             xhttp2.open("POST", "/change", true);
             xhttp2.send(tempStateLed);
         }
+
+        function turnOff2() {
+            tempStateLed = "ON";
+            document.querySelector(".btn_turn_on").classList.add("hide");
+            document.querySelector(".btn_turn_off").classList.remove("hide");
+            document.images['image_dev'].src = './light_on.png';
+            xhttp2.open("POST", "/led2", true);
+            xhttp2.send(tempStateLed);
+        }
         function sendWifiInfo() {
             var ssid = document.getElementById("ssid").value;
             var pass = document.getElementById("pass").value;
             xhttp3.open("POST", "/change", true);
             xhttp3.send(ssid + '/' + pass);
         }
+        setInterval(function () {
+            xhttp4.open("GET", "/ds18b20", true);
+            xhttp4.send();
+        }, 5000);//cứ 1s lấy dữ liệu 1 lần rùi gửi lên web server
     </script>
 </body>
 

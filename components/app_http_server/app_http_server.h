@@ -4,7 +4,9 @@
 typedef void (*http_server_handle_t)(char *data, int len);
 void start_webserver(void);
 void stop_webserver(void);
+void http_send_response(char *data, int len);
 void http_get_set_callback(void *cb);
 void http_post_set_callback(void *cb);
 void local_post_set_callback(void *cb);
+void http_led2_post_set_callback(void *cb);
 #endif

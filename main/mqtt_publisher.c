@@ -103,19 +103,12 @@ void mqtt_publisher(void *pvParameters)
 	memset(&opts, 0, sizeof(opts)); // Set MQTT options
 	// opts.client_id = mg_str("PUB");				// Set Client ID
 	opts.client_id = mg_str(pcTaskGetName(NULL)); // Set Client ID
-	// opts.qos = 1;									// Set QoS to 1
-	// for Ver7.6
+
 	opts.will_qos = 1;					   // Set QoS to 1
 	opts.will_topic = mg_str(will_topic);  // Set last will topic
 	opts.will_message = mg_str("goodbye"); // And last will message
 
-	// Connect address is x.x.x.x:1883
-	// 0.0.0.0:1883 not work
 	ESP_LOGD(pcTaskGetName(NULL), "url=[%s]", url);
-	// static const char *url = "mqtt://broker.hivemq.com:1883";
-	// mg_mqtt_connect(&mgr, url, &opts, fn, &done);  // Create client connection
-	// mg_mqtt_connect(&mgr, url, &opts, fn, &done);  // Create client connection
-	// mg_mqtt_connect(&mgr, url, &opts, fn, &url);	// Create client connection
 	struct mg_connection *mgc;
 	mgc = mg_mqtt_connect(&mgr, url, &opts, fn, &url); // Create client connection
 
@@ -140,23 +133,6 @@ void mqtt_publisher(void *pvParameters)
 					 (int)topic.len, topic.ptr);
 			xEventGroupClearBits(s_mqtt_event_group, MESSAGE_TX_ARRIVE_BIT);
 		}
-		// if ((bits & MQTT_CONNECTED_BIT) != 0)
-		// {
-		// 	counter++;
-		// 	if (counter > 100)
-		// 	{
-		// 		counter = 0;
-		// 		char payload[64];
-		// 		sprintf(payload, "TickCount=%" PRIu32, xTaskGetTickCount());
-		// 		struct mg_str data = mg_str(payload);
-		// 		// mg_mqtt_pub(mgc, &topic, &data);
-		// 		// mg_mqtt_pub(mgc, &topic, &data, 1, false);
-		// 		// for Ver7.6
-		// 		mg_mqtt_pub(mgc, topic, data, 1, false);
-		// 		ESP_LOGI(pcTaskGetName(NULL), "PUBSLISHED %.*s -> %.*s", (int)data.len, data.ptr,
-		// 				 (int)topic.len, topic.ptr);
-		// 	}
-		// }
 		mg_mgr_poll(&mgr, 10);
 		vTaskDelay(1000 / portTICK_RATE_MS);
 	}

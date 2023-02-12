@@ -114,9 +114,8 @@ void mqtt_subscriber(void *pvParameters)
 	struct mg_mgr mgr;
 	struct mg_mqtt_opts opts; // MQTT connection options
 	// bool done = false;		 // Event handler flips it to true when done
-	mg_mgr_init(&mgr);				// Initialise event manager
-	memset(&opts, 0, sizeof(opts)); // Set MQTT options
-	// opts.client_id = mg_str("SUB");				// Set Client ID
+	mg_mgr_init(&mgr);							  // Initialise event manager
+	memset(&opts, 0, sizeof(opts));				  // Set MQTT options
 	opts.client_id = mg_str(pcTaskGetName(NULL)); // Set Client ID
 	// opts.qos = 1;									// Set QoS to 1
 	// for Ver7.6
@@ -124,16 +123,11 @@ void mqtt_subscriber(void *pvParameters)
 	opts.will_topic = mg_str(will_topic);  // Set last will topic
 	opts.will_message = mg_str("goodbye"); // And last will message
 
-	// Connect address is x.x.x.x:1883
-	// 0.0.0.0:1883 not work
 	ESP_LOGD(pcTaskGetName(NULL), "url=[%s]", url);
-	// static const char *url = "mqtt://broker.hivemq.com:1883";
-	// mg_mqtt_connect(&mgr, url, &opts, fn, &done);  // Create client connection
-	// mg_mqtt_connect(&mgr, url, &opts, fn, &done);  // Create client connection
+
 	struct mg_connection *mgc;
 	mgc = mg_mqtt_connect(&mgr, url, &opts, fn, &url); // Create client connection
 
-	/* Processing events */
 	s_wifi_event_group = xEventGroupCreate();
 
 	while (1)
