@@ -1,3 +1,8 @@
+| Supported Targets | ESP32 |
+| ----------------- | ----- |
+
+Link GitHub: https://github.com/BungVuQuang/esp32_broker
+
 # Giới thiệu chung
 Dự án này được viết nhằm mục đích tạo MQTT Broker bằng ESP-idf để làm gateway để điều khiển Client MQTT
 
